@@ -1,5 +1,7 @@
 # SQL Reference Guide
 
+github repository: https://github.com/isaac-evs/SQL_Guide
+
 This guide provides a comprehensive overview of SQL operators, commands, and concepts with examples.
 
 ## Basic Operators and Clauses
