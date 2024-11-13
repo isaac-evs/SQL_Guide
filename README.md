@@ -1,4 +1,4 @@
-# SQL Reference Guide
+# SQL Guide
 
 github repository: https://github.com/isaac-evs/SQL_Guide
 
