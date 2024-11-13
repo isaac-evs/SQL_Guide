@@ -13,16 +13,16 @@ SELECT * FROM employees WHERE salary > 50000;
 ### JOIN
 **Description**: Combines rows from two or more tables based on a related column.
 ```sql
-SELECT orders.order_id, customers.name 
-FROM orders 
+SELECT orders.order_id, customers.name
+FROM orders
 JOIN customers ON orders.customer_id = customers.id;
 ```
 
 ### GROUP BY
 **Description**: Groups rows that have the same values into summary rows.
 ```sql
-SELECT department, COUNT(*) as employee_count 
-FROM employees 
+SELECT department, COUNT(*) as employee_count
+FROM employees
 GROUP BY department;
 ```
 
@@ -35,15 +35,15 @@ SELECT name, age FROM users ORDER BY age DESC;
 ### INSERT INTO
 **Description**: Adds new records into a table.
 ```sql
-INSERT INTO employees (name, salary, department) 
+INSERT INTO employees (name, salary, department)
 VALUES ('John Doe', 60000, 'IT');
 ```
 
 ### UPDATE
 **Description**: Modifies existing records in a table.
 ```sql
-UPDATE employees 
-SET salary = 65000 
+UPDATE employees
+SET salary = 65000
 WHERE name = 'John Doe';
 ```
 
@@ -68,7 +68,7 @@ CREATE TABLE employees (
 ### ALTER TABLE
 **Description**: Modifies an existing table structure.
 ```sql
-ALTER TABLE employees 
+ALTER TABLE employees
 ADD COLUMN email VARCHAR(100);
 ```
 
@@ -83,14 +83,14 @@ DROP TABLE employees;
 ### VIEW
 **Description**: Creates a virtual table based on a SELECT statement.
 ```sql
-CREATE VIEW high_salary_employees AS 
+CREATE VIEW high_salary_employees AS
 SELECT * FROM employees WHERE salary > 70000;
 ```
 
 ### INDEX
 **Description**: Creates an index for faster data retrieval.
 ```sql
-CREATE INDEX idx_employee_name 
+CREATE INDEX idx_employee_name
 ON employees(name);
 ```
 
@@ -99,8 +99,8 @@ ON employees(name);
 ### UNION
 **Description**: Combines result sets of multiple SELECT statements and removes duplicates.
 ```sql
-SELECT city FROM customers 
-UNION 
+SELECT city FROM customers
+UNION
 SELECT city FROM suppliers;
 ```
 
@@ -109,16 +109,16 @@ SELECT city FROM suppliers;
 ### SUBQUERY
 **Description**: A query nested inside another query.
 ```sql
-SELECT name FROM employees 
+SELECT name FROM employees
 WHERE salary > (SELECT AVG(salary) FROM employees);
 ```
 
 ### HAVING
 **Description**: Filters group results based on aggregate functions.
 ```sql
-SELECT department, AVG(salary) 
-FROM employees 
-GROUP BY department 
+SELECT department, AVG(salary)
+FROM employees
+GROUP BY department
 HAVING AVG(salary) > 60000;
 ```
 
@@ -182,7 +182,7 @@ SELECT name AS employee_name FROM employees;
 **Description**: Creates different outputs based on conditions.
 ```sql
 SELECT name,
-    CASE 
+    CASE
         WHEN salary > 70000 THEN 'High'
         WHEN salary > 50000 THEN 'Medium'
         ELSE 'Low'
@@ -207,9 +207,9 @@ SELECT COALESCE(phone, email, 'No Contact') FROM employees;
 ### EXISTS
 **Description**: Tests for the existence of records in a subquery.
 ```sql
-SELECT * FROM departments 
+SELECT * FROM departments
 WHERE EXISTS (
-    SELECT 1 FROM employees 
+    SELECT 1 FROM employees
     WHERE employees.dept_id = departments.id
 );
 ```
@@ -219,28 +219,28 @@ WHERE EXISTS (
 ### INNER JOIN
 **Description**: Returns only the matching rows between tables.
 ```sql
-SELECT * FROM orders 
+SELECT * FROM orders
 INNER JOIN customers ON orders.customer_id = customers.id;
 ```
 
 ### LEFT JOIN
 **Description**: Returns all records from the left table and matching records from the right table.
 ```sql
-SELECT * FROM employees 
+SELECT * FROM employees
 LEFT JOIN departments ON employees.dept_id = departments.id;
 ```
 
 ### RIGHT JOIN
 **Description**: Returns all records from the right table and matching records from the left table.
 ```sql
-SELECT * FROM employees 
+SELECT * FROM employees
 RIGHT JOIN departments ON employees.dept_id = departments.id;
 ```
 
 ### FULL OUTER JOIN
 **Description**: Returns all records when there's a match in either left or right table.
 ```sql
-SELECT * FROM employees 
+SELECT * FROM employees
 FULL OUTER JOIN departments ON employees.dept_id = departments.id;
 ```
 
@@ -254,7 +254,7 @@ SELECT * FROM sizes CROSS JOIN colors;
 **Description**: Joins a table with itself.
 ```sql
 SELECT e1.name as employee, e2.name as manager
-FROM employees e1 
+FROM employees e1
 LEFT JOIN employees e2 ON e1.manager_id = e2.id;
 ```
 
@@ -531,3 +531,171 @@ END;
 - COMMIT
 - ROLLBACK
 - SAVEPOINT
+
+## Relational Algebra
+
+Relational algebra is a fundamental set of operations used in relational databases. These operations form the theoretical foundation of SQL queries.
+
+### Selection (σ)
+**Description**: Filters tuples (rows) based on a condition.
+**Notation**: σ<condition>(R)
+**SQL Equivalent**:
+```sql
+-- Relational Algebra: σsalary>50000(employees)
+SELECT * FROM employees WHERE salary > 50000;
+```
+
+### Projection (π)
+**Description**: Selects specific attributes (columns) from a relation.
+**Notation**: π<attributes>(R)
+**SQL Equivalent**:
+```sql
+-- Relational Algebra: πname,salary(employees)
+SELECT name, salary FROM employees;
+```
+
+### Union (∪)
+**Description**: Combines two relations and removes duplicates.
+**Notation**: R ∪ S
+**SQL Equivalent**:
+```sql
+-- Relational Algebra: πcity(customers) ∪ πcity(suppliers)
+SELECT city FROM customers
+UNION
+SELECT city FROM suppliers;
+```
+
+### Set Difference (-)
+**Description**: Returns tuples in first relation but not in second.
+**Notation**: R - S
+**SQL Equivalent**:
+```sql
+-- Relational Algebra: πcity(customers) - πcity(suppliers)
+SELECT city FROM customers
+EXCEPT
+SELECT city FROM suppliers;
+```
+
+### Cartesian Product (×)
+**Description**: Combines every tuple from first relation with every tuple from second.
+**Notation**: R × S
+**SQL Equivalent**:
+```sql
+-- Relational Algebra: employees × departments
+SELECT * FROM employees
+CROSS JOIN departments;
+```
+
+### Natural Join (⋈)
+**Description**: Joins relations based on common attributes.
+**Notation**: R ⋈ S
+**SQL Equivalent**:
+```sql
+-- Relational Algebra: employees ⋈ departments
+SELECT * FROM employees
+NATURAL JOIN departments;
+```
+
+### Theta Join (⋈θ)
+**Description**: Joins relations based on a specific condition.
+**Notation**: R ⋈θ S
+**SQL Equivalent**:
+```sql
+-- Relational Algebra: employees ⋈(employees.dept_id = departments.id) departments
+SELECT * FROM employees
+JOIN departments ON employees.dept_id = departments.id;
+```
+
+### Division (÷)
+**Description**: Returns elements from first relation that match all elements in second relation.
+**Notation**: R ÷ S
+**SQL Equivalent**:
+```sql
+-- Relational Algebra: suppliers ÷ products
+-- Find suppliers who supply all products
+SELECT s.supplier_id
+FROM suppliers s
+WHERE NOT EXISTS (
+    SELECT p.product_id
+    FROM products p
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM supplies sup
+        WHERE sup.supplier_id = s.supplier_id
+        AND sup.product_id = p.product_id
+    )
+);
+```
+
+### Rename (ρ)
+**Description**: Renames attributes or relations.
+**Notation**: ρnew_name(R) or ρnew_name(attribute_list)(R)
+**SQL Equivalent**:
+```sql
+-- Relational Algebra: ρmanager(employees)
+SELECT e1.name as employee, e2.name as manager
+FROM employees e1
+JOIN employees e2 ON e1.manager_id = e2.id;
+```
+
+### Intersection (∩)
+**Description**: Returns tuples that appear in both relations.
+**Notation**: R ∩ S
+**SQL Equivalent**:
+```sql
+-- Relational Algebra: πcity(customers) ∩ πcity(suppliers)
+SELECT city FROM customers
+INTERSECT
+SELECT city FROM suppliers;
+```
+
+### Aggregation (γ)
+**Description**: Groups and applies aggregate functions.
+**Notation**: γcolumn_list,aggregate_function(R)
+**SQL Equivalent**:
+```sql
+-- Relational Algebra: γdepartment,COUNT(*)(employees)
+SELECT department, COUNT(*)
+FROM employees
+GROUP BY department;
+```
+
+### Extended Operators
+
+#### Outer Join (⟕, ⟖, ⟗)
+**Description**: Includes unmatched tuples with null values.
+- Left Outer Join (⟕)
+- Right Outer Join (⟖)
+- Full Outer Join (⟗)
+**SQL Equivalent**:
+```sql
+-- Relational Algebra: employees ⟕ departments
+SELECT * FROM employees
+LEFT OUTER JOIN departments ON employees.dept_id = departments.id;
+```
+
+#### Semi Join (⋉, ⋊)
+**Description**: Joins relations but only keeps attributes from one relation.
+**Notation**: R ⋉ S or R ⋊ S
+**SQL Equivalent**:
+```sql
+-- Relational Algebra: employees ⋉ departments
+SELECT DISTINCT employees.*
+FROM employees
+JOIN departments ON employees.dept_id = departments.id;
+```
+
+### Important Properties
+
+1. **Closure Property**: Result of any relational operation is also a relation
+2. **Commutative Property**:
+   - R ∪ S = S ∪ R
+   - R ∩ S = S ∩ R
+   - R ⋈ S = S ⋈ R
+3. **Associative Property**:
+   - (R ∪ S) ∪ T = R ∪ (S ∪ T)
+   - (R ∩ S) ∩ T = R ∩ (S ∩ T)
+   - (R ⋈ S) ⋈ T = R ⋈ (S ⋈ T)
+4. **Distributive Property**:
+   - σc(R ∪ S) = σc(R) ∪ σc(S)
+   - πa(R ∪ S) = πa(R) ∪ πa(S)
